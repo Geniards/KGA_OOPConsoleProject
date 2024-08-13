@@ -10,8 +10,8 @@ namespace KGA_OOPConsoleProject
 {
     public class Player : ICreate, IINFO
     {
-        public int count { get; protected set; }          // 움직일 수 있는 카운트
-        public int maxCount { get; protected set; }       // 총 움직일 수 있는 카운트
+        public int count { get; set; }          // 움직일 수 있는 카운트
+        public int maxCount { get; set; }       // 총 움직일 수 있는 카운트
 
         public string name { get; set; }
         public int hp { get; set; }
@@ -19,9 +19,11 @@ namespace KGA_OOPConsoleProject
         public (int, int) pos { get; set; }
         public EState state { get; set; }
 
-        public Player(string _name)
+        public Player(string _name, int _maxCount)
         {
             name = _name;
+            count = _maxCount;
+            maxCount = _maxCount;
             Init();
         }
 
@@ -31,15 +33,20 @@ namespace KGA_OOPConsoleProject
             hp = maxHp;
             state = EState.Alive;
             Console.WriteLine("플레이어 초기화");
-            pos = (0, 0);
+            pos = (1, 1);
         }
 
         public void Generate()
         {
+            Console.SetCursorPosition(pos.Item2, pos.Item1);
+            Console.BackgroundColor = ConsoleColor.Red;
+            Console.WriteLine(" ");
+            Console.ResetColor();
         }
 
         public void Render()
         {
+            Console.WriteLine($"움직일 수 있는 횟수 {count} / {maxCount}");
         }
 
         public void Dead()
