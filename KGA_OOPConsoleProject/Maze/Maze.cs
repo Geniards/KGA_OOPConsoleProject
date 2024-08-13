@@ -35,7 +35,7 @@ namespace KGA_OOPConsoleProject
         int[,] graphTemp;
         int size = 0;
         int count = 0;
-
+        public List<(int, int)> roadList = new List<(int, int)> ();
 
         //bool[] bVisite;
         //int[] distance;
@@ -43,6 +43,7 @@ namespace KGA_OOPConsoleProject
 
         public int[,] GetGraph() { return graph; }
         public int GetCount() { return count; }
+        public List<(int, int)> GetroadList() { return roadList; }
 
         // 상하좌우 이동
         private int[] DirY = { 0, 0, -2, 2 };
@@ -104,6 +105,11 @@ namespace KGA_OOPConsoleProject
                             Console.Write(" ");
                         }
                         graphTemp[i, j] = 1;
+
+                        (int, int) num;
+                        num.Item1 = i;
+                        num.Item2 = j;
+                        roadList.Add(num);
                     }
                 }
                 Console.WriteLine();
@@ -224,9 +230,9 @@ namespace KGA_OOPConsoleProject
 
             if (found)
             {
+                int result = 0;
                 // 목적지의 부모의 위치
                 (int x, int y) cur = (w - 2, h - 2);
-
                 // 시작점까지 거슬러 올라가자(최단 루트)
                 while (!(cur.x == 1 && cur.y == 1))
                 {
@@ -238,13 +244,14 @@ namespace KGA_OOPConsoleProject
                     //Console.ResetColor();
 
                     // 이때 비용이 있다면 다 더해주면 최단 비용.
-                    count++;
+                    result++;
                 }
                 Console.SetCursorPosition(maps.GetLength(0), maps.GetLength(1));
 
-                //count += 1; // 시작과 끝 더함
+                //result += 1; // 시작과 끝 더함
 
-                Console.WriteLine(count);
+                Console.WriteLine(result - 1);
+                count = result - 1;
             }
             #endregion
         }

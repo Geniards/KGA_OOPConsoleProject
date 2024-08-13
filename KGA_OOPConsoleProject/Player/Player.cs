@@ -22,8 +22,8 @@ namespace KGA_OOPConsoleProject
         public Player(string _name, int _maxCount)
         {
             name = _name;
-            count = _maxCount;
             maxCount = _maxCount;
+            count = maxCount;
             Init();
         }
 

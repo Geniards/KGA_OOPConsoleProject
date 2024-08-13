@@ -62,11 +62,6 @@ namespace KGA_OOPConsoleProject.Input
             {
                 Console.WriteLine("잘못된 입력입니다.");
             }
-
-            Console.WriteLine("====================");
-            Console.WriteLine("InputComponent");
-            Console.WriteLine(pos);
-            Console.WriteLine(count);
         }
     }
 }
