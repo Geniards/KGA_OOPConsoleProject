@@ -7,6 +7,10 @@
             Maze maze = new Maze(11);
             maze.Generate();
             maze.Render();
+
+            Player player = new Player("ABC");
+
+            
         }
 
         

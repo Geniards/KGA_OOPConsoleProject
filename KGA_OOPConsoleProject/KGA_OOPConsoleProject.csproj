@@ -8,10 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Monster\" />
     <Folder Include="Input\" />
     <Folder Include="Game\" />
-    <Folder Include="Player\" />
   </ItemGroup>
 
 </Project>
