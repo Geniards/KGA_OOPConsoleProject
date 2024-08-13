@@ -30,13 +30,19 @@ namespace KGA_OOPConsoleProject
 
     public class Maze : ICreate
     {
-        const int INF = int.MaxValue;
+        const int INF = 0;
         int[,] graph;
         int[,] graphTemp;
         int size = 0;
+        int count = 0;
+
+
         //bool[] bVisite;
         //int[] distance;
         //int start = 0;
+
+        public int[,] GetGraph() { return graph; }
+        public int GetCount() { return count; }
 
         // 상하좌우 이동
         private int[] DirY = { 0, 0, -2, 2 };
@@ -218,7 +224,6 @@ namespace KGA_OOPConsoleProject
 
             if (found)
             {
-                int length = 0;
                 // 목적지의 부모의 위치
                 (int x, int y) cur = (w - 2, h - 2);
 
@@ -233,13 +238,13 @@ namespace KGA_OOPConsoleProject
                     //Console.ResetColor();
 
                     // 이때 비용이 있다면 다 더해주면 최단 비용.
-                    length++;
+                    count++;
                 }
                 Console.SetCursorPosition(maps.GetLength(0), maps.GetLength(1));
 
-                length += 1; // 시작과 끝 더함
+                //count += 1; // 시작과 끝 더함
 
-                Console.WriteLine(length);
+                Console.WriteLine(count);
             }
             #endregion
         }
