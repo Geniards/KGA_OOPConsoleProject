@@ -36,6 +36,7 @@ namespace KGA_OOPConsoleProject
         int size = 0;
         int count = 0;
         public List<(int, int)> roadList = new List<(int, int)> ();
+        public List<(int, int)> roadList2 = new List<(int, int)> ();
 
         //bool[] bVisite;
         //int[] distance;
@@ -44,6 +45,7 @@ namespace KGA_OOPConsoleProject
         public int[,] GetGraph() { return graph; }
         public int GetCount() { return count; }
         public List<(int, int)> GetroadList() { return roadList; }
+        public List<(int, int)> GetroadList2() { return roadList2; }
 
         // 상하좌우 이동
         private int[] DirY = { 0, 0, -2, 2 };
@@ -249,7 +251,7 @@ namespace KGA_OOPConsoleProject
                 while (!(cur.x == 1 && cur.y == 1))
                 {
                     cur = parents[cur];
-
+                    roadList2.Add(cur);
                     //Console.BackgroundColor = ConsoleColor.Yellow;
                     //Console.SetCursorPosition(cur.y, cur.x);
                     //Console.Write($" ");

@@ -70,6 +70,10 @@ namespace KGA_OOPConsoleProject.Input
                 }
                 count--;
             }
+            else if (cki.Key == ConsoleKey.M)
+            {
+                    dir = 5;
+            }
             else
             {
                 Console.WriteLine("잘못된 입력입니다.");
