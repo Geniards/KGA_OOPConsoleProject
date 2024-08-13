@@ -13,22 +13,32 @@ namespace KGA_OOPConsoleProject
         public string name { get; set; }
         public int hp { get; set; }
         public int maxHp { get; set; }
-        public int[,] pos { get; set; }
+        public (int, int) pos { get; set; }
         public EState state { get; set; }
+
+        public Monster(string _name, int _maxHp, (int,int) _pos) 
+        {
+            name = _name;
+            maxHp = _maxHp;
+            hp = maxHp;
+            pos = _pos;
+            Init();
+        }
 
         public void Init()
         {
+            state = EState.Alive;
         }
 
-        public void Generate()
+        public virtual void Generate()
         {
         }
 
-        public void Render()
+        public virtual void Render()
         {
         }
 
-        public void Dead()
+        public virtual void Dead()
         {
 
         }
