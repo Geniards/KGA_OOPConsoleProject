@@ -29,7 +29,11 @@
       (DFS를 이용하여 미로를 만들고, BFS를 이용하여 최단 경로를 구함)
 ---
 
-
+  ### 2. 캐릭터 이동 및 장애물
+  ![캐릭터 동작](https://github.com/user-attachments/assets/565a60e3-7e12-4840-9fbf-4b53e65f375c)
+  ![장애물 밀기](https://github.com/user-attachments/assets/697c7474-5252-4036-bab8-16b33c3e9dee)
+ 
+ > 캐릭터의 이동과 장애물을 생성.(장애물은 캐릭터가 앞으로 움직일 수 있다. 단 벽으로 밀었을시 터진다.)
 
 
 
