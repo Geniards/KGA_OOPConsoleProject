@@ -116,9 +116,21 @@ namespace KGA_OOPConsoleProject
             }
 
             Console.WriteLine();
+        }
 
+        public void searchLoard()
+        {
             BFS(graphTemp);
         }
+
+        public bool search(int x, int y)
+        {
+            if (graph[x, y] == 1)
+                return true;
+            return false;
+        }
+
+
 
         private void DFS(int[,] map, int X, int Y)
         {
@@ -171,7 +183,7 @@ namespace KGA_OOPConsoleProject
             return array;
         }
 
-        public void BFS(int[,] maps)
+        private void BFS(int[,] maps)
         {
             #region 풀이
             int w = maps.GetLength(0);
