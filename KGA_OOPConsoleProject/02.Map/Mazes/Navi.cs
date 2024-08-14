@@ -23,7 +23,7 @@ namespace KGA_OOPConsoleProject
             // BFS 확인 'M'
             if (dir == 5)
             {
-                foreach (var v in maze.roadList2)
+                foreach (var v in maze.Get_shortest_Path())
                 {
                     Console.BackgroundColor = ConsoleColor.Yellow;
                     Console.SetCursorPosition(v.Item2, v.Item1);

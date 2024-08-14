@@ -5,7 +5,7 @@ namespace KGA_OOPConsoleProject.Game
 {
     public class GamePlay
     {
-        Maze maze;
+        Maze maze = Maze.Instance;
         Obstacle[] obstacle;
         Player player;
         InputComponent input;
@@ -21,17 +21,15 @@ namespace KGA_OOPConsoleProject.Game
             bNextStage = false;
 
             // 맵 생성
-            maze = new Maze(11);
-            maze.Generate();
             maze.Render();
             maze.searchLoard();
 
             // 장애물 생성
-            obstacle = new Obstacle[maze.GetGraph().GetLength(0) / 2];
+            obstacle = new Obstacle[maze.GetMap().GetLength(0) / 2];
             Obstacle_Reset(obstacle);
 
             // player 초기화 && 입력 시스템 초기화
-            player = new Player("ABC", maze.GetroadList2().Count - 1 + obstacle.Length);
+            player = new Player("ABC", maze.Get_shortest_Path().Count - 1 + obstacle.Length);
             input = new InputComponent();
 
             // 장애물 이동 및 길 찾기
@@ -50,7 +48,7 @@ namespace KGA_OOPConsoleProject.Game
                 Render();
 
                 // 입력
-                input.Move(maze.GetGraph(), ref pos, ref count, ref dir);
+                input.Move(maze.GetMap(), ref pos, ref count, ref dir);
 
                 // 플레이어 위치 초기화
                 player.pos = pos;
@@ -120,18 +118,17 @@ namespace KGA_OOPConsoleProject.Game
 
         private void reset()
         {
-            maze = new Maze(11 + 4 * stage);
-            maze.Generate();
+            maze.SetSize(11 + 4 * stage);
             maze.Render();
             maze.searchLoard();
 
             List<int> list = new List<int>();
             Random rand = new Random();
 
-            obstacle = new Obstacle[maze.GetGraph().GetLength(0) / 2];
+            obstacle = new Obstacle[maze.GetMap().GetLength(0) / 2];
             Obstacle_Reset(obstacle);
 
-            player = new Player("ABC", maze.GetroadList2().Count - 1 + obstacle.Length);
+            player = new Player("ABC", maze.Get_shortest_Path().Count - 1 + obstacle.Length);
         }
 
         private void Obstacle_Reset(Obstacle[] _obstacle)
@@ -141,13 +138,13 @@ namespace KGA_OOPConsoleProject.Game
 
             for (int i = 0; i < _obstacle.Length; i++)
             {
-                int num = rand.Next(2, maze.GetroadList().Count - 2);
+                int num = rand.Next(2, maze.Get_Is_Path().Count - 2);
 
                 while (!list.Contains(num))
                 {
                     list.Add(num);
                 }
-                _obstacle[i] = new Obstacle("ABC", 2, (maze.GetroadList()[list.Last()].Item1, maze.GetroadList()[num].Item2));
+                _obstacle[i] = new Obstacle("ABC", 2, (maze.Get_Is_Path()[list.Last()].Item1, maze.Get_Is_Path()[num].Item2));
             }
         }
 
@@ -209,7 +206,7 @@ namespace KGA_OOPConsoleProject.Game
 
         private void NextStage()
         {
-            if ((player.pos.Item1 == maze.GetGraph().GetLength(0) - 2 && player.pos.Item2 == maze.GetGraph().GetLength(1) - 2))
+            if ((player.pos.Item1 == maze.GetMap().GetLength(0) - 2 && player.pos.Item2 == maze.GetMap().GetLength(1) - 2))
             {
                 Console.WriteLine("도착");
                 bNextStage = true;

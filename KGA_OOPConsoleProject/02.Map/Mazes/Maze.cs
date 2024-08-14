@@ -24,45 +24,61 @@ namespace KGA_OOPConsoleProject
 
     public class Maze : ICreate
     {
-        const int INF = 0;
-        int[,] graph;
-        int[,] graphTemp;
-        int size = 0;
-        public List<(int, int)> roadList = new List<(int, int)> ();
-        public List<(int, int)> roadList2 = new List<(int, int)> ();
-
-        public int[,] GetGraph() { return graph; }
-        public List<(int, int)> GetroadList() { return roadList; }
-        public List<(int, int)> GetroadList2() { return roadList2; }
-
-        // 상하좌우 이동
-        private int[] DirY = { 0, 0, -2, 2 };
-        private int[] DirX = { -2, 2, 0, 0 };
-
-        public Maze(int _size = 0)
+        // 싱글톤
+        private static readonly Maze _instance;
+        static Maze()
+        {
+            _instance = new Maze(11);
+        }
+        private Maze(int _size = 0)
         {
             size = _size;
             Init();
+            Generate();
         }
+        public static Maze Instance
+        {
+            get { return _instance; }
+        }
+
+        // 맵 사이즈 리셋
+        public void SetSize(int _size = 0)
+        {
+            size = _size;
+            Init();
+            Generate();
+        }
+
+        const int INF = 0;
+        private int[,] graph;
+        private int size = 0;
+        private List<(int, int)> Is_Path = new List<(int, int)> ();
+        private List<(int, int)> shortest_Path = new List<(int, int)> ();
+
+        public int[,] GetMap() { return graph; }
+        public List<(int, int)> Get_Is_Path() { return Is_Path; }
+        public List<(int, int)> Get_shortest_Path() { return shortest_Path; }
+
+        // 상하좌우 이동(벽 때문에)
+        private int[] DirY = { 0, 0, -2, 2 };
+        private int[] DirX = { -2, 2, 0, 0 };
 
         public void Init()
         {
             // 맵 초기화
             graph = new int[size,size];
-            graphTemp = new int[size,size];
             for (int i = 0; i < size; i++)
             {
                 for (int j = 0; j < size; j++)
                 {
                     graph[i, j] = INF;
-                    graphTemp[i, j] = 0;
                 }
             }
         }
 
         public void Generate()
         {
-            DFS(graph, 1,1);
+            DFS(1,1);
         }
 
         public void Render()
@@ -90,12 +106,12 @@ namespace KGA_OOPConsoleProject
                             // 이동통로
                             Console.Write(" ");
                         }
-                        graphTemp[i, j] = 1;
 
+                        // 모든 이동 통로
                         (int, int) num;
                         num.Item1 = i;
                         num.Item2 = j;
-                        roadList.Add(num);
+                        Is_Path.Add(num);
                     }
                 }
                 Console.WriteLine();
@@ -106,7 +122,7 @@ namespace KGA_OOPConsoleProject
 
         public void searchLoard()
         {
-            BFS(graphTemp);
+            FindshortestPath();
         }
 
         public bool search(int x, int y)
@@ -116,12 +132,10 @@ namespace KGA_OOPConsoleProject
             return false;
         }
 
-
-
-        private void DFS(int[,] map, int X, int Y)
+        private void DFS(int X, int Y)
         {
             // 시작 위치 세팅
-            map[X, Y] = 1;          // 0 이동가능한 공간
+            graph[X, Y] = 1;          // 1 이동가능한 공간
 
             int CurX = X;
             int CurY = Y;
@@ -137,20 +151,20 @@ namespace KGA_OOPConsoleProject
                 int nextX = X + DirX[dir];
                 int nextY = Y + DirY[dir];
 
-                if (IsValidMove(graph, nextX, nextY))
+                if (IsValidMove(nextX, nextY))
                 {
                     graph[nextX, nextY] = 1;    // 빈 공간으로 설정
                     graph[X + DirX[dir] / 2, Y + DirY[dir] / 2] = 1; // 벽 제거
-                    DFS(graph, nextX, nextY);
+                    DFS(nextX, nextY);
                 }
             }
         }
 
-        private bool IsValidMove(int[,] map, int nextX, int nextY)
+        private bool IsValidMove(int nextX, int nextY)
         {
-            if(nextX > 0 && nextX < map.GetLength(0)-1 &&
-                nextY > 0 && nextY < map.GetLength(1)-1 &&
-                map[nextX, nextY] == INF)
+            if(nextX > 0 && nextX < graph.GetLength(0)-1 &&
+                nextY > 0 && nextY < graph.GetLength(1)-1 &&
+                graph[nextX, nextY] == INF)
                 return true;
 
             return false;
@@ -169,24 +183,24 @@ namespace KGA_OOPConsoleProject
             return array;
         }
 
-        private void BFS(int[,] maps)
+        // BFS
+        private void FindshortestPath()
         {
-            #region 풀이
-            int w = maps.GetLength(0);
-            int h = maps.GetLength(1);
-
+            shortest_Path.Clear();
             Queue<(int, int)> queue = new Queue<(int x, int y)>();
 
             // 부모의 위치
             Dictionary<(int x, int y), (int x, int y)> parents = new Dictionary<(int x, int y), (int x, int y)>();
             // 움직일 방향(상하좌우)
             (int, int)[] dirs = new (int x, int y)[4] { (-1, 0), (1, 0), (0, -1), (0, 1) };
+            // 방문했는지 파악
+            bool[,] visited = new bool[size, size];
 
             // 시작위치 설정
             queue.Enqueue((1, 1));
 
-            // 시작위치 초기화
-            maps[1, 1] = 0;
+            // 시작 방문표시 초기화
+            visited[1, 1] = true;
 
             // 도착지점 
             bool found = false;
@@ -198,7 +212,7 @@ namespace KGA_OOPConsoleProject
                 (int x, int y) cur = queue.Dequeue();
 
                 // 도착지점에 도달했는지 파악
-                if (cur.x == w - 2 && cur.y == h - 2) // 도달!
+                if (cur.x == graph.GetLength(0) - 2 && cur.y == graph.GetLength(1) - 2) // 도달!
                 {
                     found = true;
                     break;
@@ -211,38 +225,31 @@ namespace KGA_OOPConsoleProject
                     (int x, int y) p = (cur.x + dir.x, cur.y + dir.y);
 
                     // 이동후 좌표가 범위를 벗어날시 다른 움직임을 확인한다.
-                    if (p.x < 1 || p.x >= w-1 || p.y < 1 || p.y >= h-1)
+                    if (p.x < 1 || p.x >= graph.GetLength(0) - 1 
+                        || p.y < 1 || p.y >= graph.GetLength(1) - 1)
                         continue;
 
                     // 아직 움직이지 않은 곳이라면 1 움직인 곳은 0으로 표시한다.
-                    if (maps[p.x, p.y] != 1)
+                    if (graph[p.x, p.y] != 1 || visited[p.x, p.y])
                         continue;
-
 
                     parents[p] = cur;   // 이동하기 전 위치를 부모의 값으로 저장한다.
                     queue.Enqueue(p);   // 이동한 위치의 값을 큐에 저장 후 다음에 불러내도록 한다.
-                    maps[p.x, p.y] = 0; // 방문했으니 0으로 표시
-
+                    visited[p.x, p.y] = true; // 방문했으니 true로 표시
                 }
             }
 
             if (found)
             {
-                int result = 0;
                 // 목적지의 부모의 위치
-                (int x, int y) cur = (w - 2, h - 2);
+                (int x, int y) cur = (graph.GetLength(0) - 2, graph.GetLength(1) - 2);
                 // 시작점까지 거슬러 올라가자(최단 루트)
                 while (!(cur.x == 1 && cur.y == 1))
                 {
                     cur = parents[cur];
-                    roadList2.Add(cur);
-
-                    // 이때 비용이 있다면 다 더해주면 최단 비용.
-                    result++;
+                    shortest_Path.Add(cur);
                 }
-                Console.SetCursorPosition(maps.GetLength(0), maps.GetLength(1));
             }
-            #endregion
         }
     }
 }

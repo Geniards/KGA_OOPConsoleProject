@@ -53,10 +53,14 @@ namespace KGA_OOPConsoleProject._03.Item.Inventory
             }
         }
 
-        public void Item_Use(int num)
+        public void Item_Use(int num, Player player, bool bRoard)
         {
-            if(invens[num - 1].name != "Jumpper")
-                invens[num-1].Use();
+            if (invens[num - 1].name == "Potion")
+                player.count = invens[num - 1].Use(player.count);
+
+            if (invens[num - 1].name == "MapReSearch")
+                invens[num - 1].Use();
+
         }
         
     }
