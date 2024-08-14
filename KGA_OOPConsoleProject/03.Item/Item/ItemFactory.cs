@@ -10,7 +10,7 @@ namespace KGA_OOPConsoleProject._03.Item.Item
 {
     public class ItemFactory
     {
-        public static T Instantiate<T>(string Name) where T : Item
+        public static T Instantiate<T>(string Name) where T : Items
         {
             if (Name == "Potion")
             {
@@ -54,7 +54,7 @@ namespace KGA_OOPConsoleProject._03.Item.Item
             }
         }
 
-        public static Item Instantiate(string name)
+        public static Items Instantiate(string name)
         {
             if(name == "Potion")
             {

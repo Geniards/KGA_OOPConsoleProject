@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace KGA_OOPConsoleProject._03.Item.Item
 {
-    public class Potion : Item
+    public class Potion : Items
     {
         public Potion() 
         {

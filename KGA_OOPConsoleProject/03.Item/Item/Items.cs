@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace KGA_OOPConsoleProject._03.Item.Item
 {
-    public abstract class Item
+    public abstract class Items
     {
         public string name { get; set; }
         public string info { get; set; }
@@ -15,7 +15,7 @@ namespace KGA_OOPConsoleProject._03.Item.Item
         public int gold { get; set; }
         public int effect { get; set; }
 
-        public Item()
+        public Items()
         {
             name = "아이템";
             info = "아이템입니다.";

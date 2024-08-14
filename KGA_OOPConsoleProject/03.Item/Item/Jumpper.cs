@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace KGA_OOPConsoleProject._03.Item.Item
 {
-    public class Jumpper : Item
+    public class Jumpper : Items
     {
         public Jumpper()
         {
