@@ -10,4 +10,9 @@ namespace KGA_OOPConsoleProject.Util
     {
         Alive, Dead, Hit, ESTATE_MAX
     }
+
+    public enum EItemType
+    {
+        Potion, MapReSearch, Jumpper, EITEM_TYPE_MAX
+    }
 }
