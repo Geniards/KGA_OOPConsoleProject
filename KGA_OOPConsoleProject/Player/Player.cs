@@ -51,8 +51,11 @@ namespace KGA_OOPConsoleProject
 
         public void Dead()
         {
-            if(count < 0)
+            if (count < 0)
+            {
                 Console.WriteLine("에너지가 다 떨어졌습니다.");
+                state = EState.Dead;
+            }
         }
     }
 }

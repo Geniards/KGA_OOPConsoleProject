@@ -34,7 +34,6 @@ namespace KGA_OOPConsoleProject
         int[,] graph;
         int[,] graphTemp;
         int size = 0;
-        int count = 0;
         public List<(int, int)> roadList = new List<(int, int)> ();
         public List<(int, int)> roadList2 = new List<(int, int)> ();
 
@@ -43,7 +42,6 @@ namespace KGA_OOPConsoleProject
         //int start = 0;
 
         public int[,] GetGraph() { return graph; }
-        public int GetCount() { return count; }
         public List<(int, int)> GetroadList() { return roadList; }
         public List<(int, int)> GetroadList2() { return roadList2; }
 
@@ -252,20 +250,11 @@ namespace KGA_OOPConsoleProject
                 {
                     cur = parents[cur];
                     roadList2.Add(cur);
-                    //Console.BackgroundColor = ConsoleColor.Yellow;
-                    //Console.SetCursorPosition(cur.y, cur.x);
-                    //Console.Write($" ");
-                    //Console.ResetColor();
 
                     // 이때 비용이 있다면 다 더해주면 최단 비용.
                     result++;
                 }
                 Console.SetCursorPosition(maps.GetLength(0), maps.GetLength(1));
-
-                //result += 1; // 시작과 끝 더함
-
-                Console.WriteLine(result - 1);
-                count = result - 1;
             }
             #endregion
         }
