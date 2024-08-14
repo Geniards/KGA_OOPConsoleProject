@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using KGA_OOPConsoleProject.Util;
+using System.Numerics;
 
 namespace KGA_OOPConsoleProject
 {
@@ -35,6 +32,5 @@ namespace KGA_OOPConsoleProject
         public override void Dead()
         {
         }
-
     }
 }

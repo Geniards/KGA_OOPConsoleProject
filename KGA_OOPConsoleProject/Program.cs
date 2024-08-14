@@ -1,7 +1,5 @@
 ﻿using KGA_OOPConsoleProject.Game;
-using KGA_OOPConsoleProject.Input;
-using KGA_OOPConsoleProject.Util;
-using System.Numerics;
+
 
 namespace KGA_OOPConsoleProject
 {

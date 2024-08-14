@@ -1,10 +1,5 @@
 ﻿using KGA_OOPConsoleProject.Input;
 using KGA_OOPConsoleProject.Util;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace KGA_OOPConsoleProject.Game
 {
@@ -14,6 +9,8 @@ namespace KGA_OOPConsoleProject.Game
         Obstacle[] obstacle;
         Player player;
         InputComponent input;
+        Navi navi;
+
         int stage = 0;
         bool bNextStage;
 
@@ -36,26 +33,22 @@ namespace KGA_OOPConsoleProject.Game
             // player 초기화 && 입력 시스템 초기화
             player = new Player("ABC", maze.GetroadList2().Count - 1 + obstacle.Length);
             input = new InputComponent();
+
+            // 장애물 이동 및 길 찾기
+            navi = new Navi(maze, player);
         }
 
 
-        public  void Run()
+        public void Run()
         {
             while (player.state != EState.Dead && stage < 3)
             {
+                (int x, int y) pos = player.pos;
+                int count = player.count;
+                int dir = 0;
+
                 Render();
-                update();
-            }
-            
-        }
 
-        public void update()
-        {
-            (int x, int y) pos = player.pos;
-            int count = player.count;
-            int dir = 0;
-
-            {
                 // 입력
                 input.Move(maze.GetGraph(), ref pos, ref count, ref dir);
 
@@ -63,26 +56,35 @@ namespace KGA_OOPConsoleProject.Game
                 player.pos = pos;
                 player.count = count;
 
-                Obstacle_Coll(dir);
+                update(dir);
+            }
 
-                // 최단경로 확인 'M'
-                Shortest_Path(dir);
-                // 스테이지를 클리어시
-                NextStage();
+            Console.Clear();
+            Console.WriteLine("게임이 끝났습니다.");
 
-                if (player.state == EState.Dead)
-                    return;
+        }
 
-                if (bNextStage)
-                {
-                    stage++;
-                    reset();
-                    bNextStage= false;
-                }
+        private void update(int dir)
+        {
+            Obstacle_Coll(dir);
+
+            // 최단경로 확인 'M'
+            navi.Shortest_Path(dir);
+            // 스테이지를 클리어시
+            NextStage();
+
+            if (player.state == EState.Dead)
+                return;
+
+            if (bNextStage)
+            {
+                stage++;
+                reset();
+                bNextStage = false;
             }
         }
 
-        public void Render()
+        private void Render()
         {
             Console.Clear();
             // 맵 랜더
@@ -91,13 +93,13 @@ namespace KGA_OOPConsoleProject.Game
             int currTop = Console.CursorTop;
 
             // 장애물 랜더
-            if (stage >= 0 )
+            if (stage >= 2)
             {
-                if(player.count % 2 == 0)
-                for (int i = 0; i < obstacle.Length; i++)
-                {
-                    obstacle[i].Generate();
-                }
+                if (player.count % 2 == 0)
+                    for (int i = 0; i < obstacle.Length; i++)
+                    {
+                        obstacle[i].Generate();
+                    }
             }
             else
             {
@@ -109,15 +111,16 @@ namespace KGA_OOPConsoleProject.Game
             // 플레이어 랜더
             player.Generate();
             Console.SetCursorPosition(currLeft, currTop);
+            Title();
             player.Render();
 
             //Console.WriteLine(obstacle.pos);
             Console.WriteLine(player.pos);
         }
 
-        public void reset()
+        private void reset()
         {
-            maze = new Maze(11 + 2 * stage);
+            maze = new Maze(11 + 4 * stage);
             maze.Generate();
             maze.Render();
             maze.searchLoard();
@@ -155,7 +158,7 @@ namespace KGA_OOPConsoleProject.Game
             {
                 if (player.pos == obstacle[i].pos)
                 {
-                    //player.count--;
+                    player.count--;
                     int x = obstacle[i].pos.Item1;
                     int y = obstacle[i].pos.Item2;
 
@@ -204,36 +207,28 @@ namespace KGA_OOPConsoleProject.Game
             }
         }
 
-        private void Shortest_Path(int dir)
-        {
-            // BFS 확인 'M'
-            if (dir == 5)
-            {
-                foreach (var v in maze.roadList2)
-                {
-                    Console.BackgroundColor = ConsoleColor.Yellow;
-                    Console.SetCursorPosition(v.Item2, v.Item1);
-                    Console.Write($" ");
-                    Thread.Sleep(100);
-                    Console.ResetColor();
-                }
-            }
-            Thread.Sleep(500);
-        }
-
         private void NextStage()
         {
             if ((player.pos.Item1 == maze.GetGraph().GetLength(0) - 2 && player.pos.Item2 == maze.GetGraph().GetLength(1) - 2))
             {
                 Console.WriteLine("도착");
                 bNextStage = true;
-                Thread.Sleep(500);
+                if(stage < 2)
+                    Console.WriteLine("다음 스테이지로 이동합니다.");
+                Thread.Sleep(1000);
             }
-            else
+            else if(player.count < 0)
             {
                 player.Dead();
-                Thread.Sleep(500);
+                Thread.Sleep(1000);
             }
+        }
+
+        private void Title()
+        {
+            Console.WriteLine($"{stage + 1} Stage");
+            Console.WriteLine();
+            Console.WriteLine();
         }
     }
 }

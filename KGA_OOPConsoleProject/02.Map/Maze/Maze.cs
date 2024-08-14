@@ -1,10 +1,4 @@
 ﻿using KGA_OOPConsoleProject.Interface;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace KGA_OOPConsoleProject
 {
@@ -37,10 +31,6 @@ namespace KGA_OOPConsoleProject
         public List<(int, int)> roadList = new List<(int, int)> ();
         public List<(int, int)> roadList2 = new List<(int, int)> ();
 
-        //bool[] bVisite;
-        //int[] distance;
-        //int start = 0;
-
         public int[,] GetGraph() { return graph; }
         public List<(int, int)> GetroadList() { return roadList; }
         public List<(int, int)> GetroadList2() { return roadList2; }
@@ -68,10 +58,6 @@ namespace KGA_OOPConsoleProject
                     graphTemp[i, j] = 0;
                 }
             }
-
-            // 방문 및 거리 초기화
-            //bVisite = new bool[size];
-            //distance = new int[size];
         }
 
         public void Generate()
@@ -136,7 +122,7 @@ namespace KGA_OOPConsoleProject
         {
             // 시작 위치 세팅
             map[X, Y] = 1;          // 0 이동가능한 공간
-            //bVisite[start] = true;  
+
             int CurX = X;
             int CurY = Y;
 

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace KGA_OOPConsoleProject.Input
+﻿namespace KGA_OOPConsoleProject.Input
 {
     public class InputComponent
     {
@@ -24,6 +18,7 @@ namespace KGA_OOPConsoleProject.Input
                 else
                 {
                     Console.WriteLine("위가 벽이라서 움직일 수 없습니다.");
+                    Thread.Sleep(500);
                 }
 
                 count--;
@@ -39,6 +34,7 @@ namespace KGA_OOPConsoleProject.Input
                 else
                 {
                     Console.WriteLine("아래가 벽이라서 움직일 수 없습니다.");
+                    Thread.Sleep(500);
                 }
                 count--;
             }
@@ -53,6 +49,7 @@ namespace KGA_OOPConsoleProject.Input
                 else
                 {
                     Console.WriteLine("왼쪽이 벽이라서 움직일 수 없습니다.");
+                    Thread.Sleep(500);
                 }
                 count--;
             }
@@ -67,6 +64,7 @@ namespace KGA_OOPConsoleProject.Input
                 else
                 {
                     Console.WriteLine("오른쪽이 벽이라서 움직일 수 없습니다.");
+                    Thread.Sleep(500);
                 }
                 count--;
             }
@@ -77,6 +75,7 @@ namespace KGA_OOPConsoleProject.Input
             else
             {
                 Console.WriteLine("잘못된 입력입니다.");
+                Thread.Sleep(500);
             }
         }
     }
