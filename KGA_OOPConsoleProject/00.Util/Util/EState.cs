@@ -13,6 +13,6 @@ namespace KGA_OOPConsoleProject.Util
 
     public enum EItemType
     {
-        Potion, MapReSearch, Jumpper, EITEM_TYPE_MAX
+        Potion, MapReSearch, Jump, EITEM_TYPE_MAX
     }
 }

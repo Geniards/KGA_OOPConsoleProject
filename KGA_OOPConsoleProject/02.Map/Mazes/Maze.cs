@@ -83,6 +83,7 @@ namespace KGA_OOPConsoleProject
 
         public void Render()
         {
+            Is_Path.Clear ();
             for (int i = 0; i < graph.GetLength(0); i++)
             {
                 for (int j = 0; j < graph.GetLength(1); j++)
@@ -116,8 +117,6 @@ namespace KGA_OOPConsoleProject
                 }
                 Console.WriteLine();
             }
-
-            Console.WriteLine();
         }
 
         public void searchLoard()
