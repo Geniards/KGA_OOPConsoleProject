@@ -1,4 +1,5 @@
-﻿using KGA_OOPConsoleProject.Util;
+﻿using KGA_OOPConsoleProject._03.Item.Item;
+using KGA_OOPConsoleProject.Util;
 using System.Numerics;
 
 namespace KGA_OOPConsoleProject
@@ -6,6 +7,8 @@ namespace KGA_OOPConsoleProject
     public class Obstacle : Monster
     {
         public (int, int) pos;
+        public event Action OnDied;
+
         public Obstacle(string _name, int _maxHp, (int, int) _pos) : base(_name, _maxHp, _pos)
         {
             pos = _pos;
@@ -31,6 +34,10 @@ namespace KGA_OOPConsoleProject
 
         public override void Dead()
         {
+            if (OnDied != null)
+            {
+                OnDied();
+            }
         }
     }
 }

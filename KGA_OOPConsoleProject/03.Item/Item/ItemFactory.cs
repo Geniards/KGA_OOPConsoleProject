@@ -36,14 +36,14 @@ namespace KGA_OOPConsoleProject._03.Item.Item
             }
             else if (Name == "Jummper")
             {
-                Jumpper jumpper = new Jumpper();
-                jumpper.name = "점퍼";
-                jumpper.info = "벽을 한칸 건너 뛸 수 있다.";
-                jumpper.type = Util.EItemType.Jumpper;
-                jumpper.gold = 150;
-                jumpper.effect = 1;
+                Jump jump = new Jump();
+                jump.name = "점퍼";
+                jump.info = "벽을 한칸 건너 뛸 수 있다.";
+                jump.type = Util.EItemType.Jump;
+                jump.gold = 150;
+                jump.effect = 1;
 
-                return jumpper as T;
+                return jump as T;
             }
             else
             {
@@ -78,16 +78,16 @@ namespace KGA_OOPConsoleProject._03.Item.Item
 
                 return mapReSearch;
             }
-            else if(name == "Jummper")
+            else if(name == "Jump")
             {
-                Jumpper jumpper = new Jumpper();
-                jumpper.name = "점퍼";
-                jumpper.info = "벽을 한칸 건너 뛸 수 있다.";
-                jumpper.type = Util.EItemType.Jumpper;
-                jumpper.gold = 150;
-                jumpper.effect = 1;
+                Jump jump = new Jump();
+                jump.name = "점퍼";
+                jump.info = "벽을 한칸 건너 뛸 수 있다.";
+                jump.type = Util.EItemType.Jump;
+                jump.gold = 150;
+                jump.effect = 1;
 
-                return jumpper;
+                return jump;
             }
             else
             {
