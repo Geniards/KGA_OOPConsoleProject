@@ -38,8 +38,7 @@ namespace KGA_OOPConsoleProject
 
         public void Render()
         {
-            Console.WriteLine($"움직일 수 있는 횟수 {hp} / {maxHp}");
-            Console.WriteLine();
+            Console.WriteLine($"[* number of moves: {hp} / {maxHp} *]");
         }
 
         public void Dead()

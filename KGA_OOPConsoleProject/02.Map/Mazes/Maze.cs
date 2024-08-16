@@ -79,12 +79,27 @@ namespace KGA_OOPConsoleProject
 
         public void Generate()
         {
-            DFS(1,1);
-        }
+            DFS(1, 1);
 
+            Is_Path.Clear();
+            for (int i = 0; i < graph.GetLength(0); i++)
+            {
+                for (int j = 0; j < graph.GetLength(1); j++)
+                {
+                    if (graph[i, j] != INF)
+                    {
+                        // 모든 이동 통로
+                        (int, int) num;
+                        num.Item1 = i;
+                        num.Item2 = j;
+                        Is_Path.Add(num);
+                    }
+                }
+                Console.WriteLine();
+            }
+        }
         public void Render()
         {
-            Is_Path.Clear ();
             for (int i = 0; i < graph.GetLength(0); i++)
             {
                 for (int j = 0; j < graph.GetLength(1); j++)
@@ -108,12 +123,6 @@ namespace KGA_OOPConsoleProject
                             // 이동통로
                             Console.Write(" ");
                         }
-
-                        // 모든 이동 통로
-                        (int, int) num;
-                        num.Item1 = i;
-                        num.Item2 = j;
-                        Is_Path.Add(num);
                     }
                 }
                 Console.WriteLine();
