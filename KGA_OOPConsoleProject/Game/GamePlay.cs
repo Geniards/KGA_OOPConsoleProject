@@ -1,4 +1,5 @@
-﻿using KGA_OOPConsoleProject._03.Item.Inventory;
+﻿using KGA_OOPConsoleProject._01.Unit.Monster;
+using KGA_OOPConsoleProject._03.Item.Inventory;
 using KGA_OOPConsoleProject._03.Item.Item;
 using KGA_OOPConsoleProject.Input;
 using KGA_OOPConsoleProject.Util;
@@ -10,9 +11,13 @@ namespace KGA_OOPConsoleProject.Game
     public class GamePlay
     {
         Maze maze = Maze.Instance;
-        Obstacle[] obstacle;
+
+        Obstacle[] obstacles;
+        ObstacleManager obstacleManager;
+
         Player player;
         InputComponent input;
+
         ItemManager itemManager;
         Inventory inventory;
 
@@ -34,11 +39,11 @@ namespace KGA_OOPConsoleProject.Game
             inventory = new Inventory();
 
             // 장애물 생성
-            obstacle = new Obstacle[maze.GetMap().GetLength(0) / 2];
-            Obstacle_Reset(obstacle);
+            obstacleManager = new ObstacleManager();
+            obstacles = obstacleManager.CreateObstacles(maze.GetMap().GetLength(0) / 2);
 
             // player 초기화 && 입력 시스템 초기화
-            player = new Player("Player", maze.Get_shortest_Path().Count - 1 + obstacle.Length);
+            player = new Player("Player", maze.Get_shortest_Path().Count - 1 + obstacles.Length);
             input = new InputComponent();
         }
 
@@ -129,26 +134,26 @@ namespace KGA_OOPConsoleProject.Game
             if (stage >= (int)EStage.ESTAGE_MAX - 1)
             {
                 if (player.hp % 2 == 0)
-                    for (int i = 0; i < obstacle.Length; i++)
+                    for (int i = 0; i < obstacles.Length; i++)
                     {
-                        obstacle[i].Generate();
+                        obstacles[i].Generate();
                     }
             }
             else
             {
-                for (int i = 0; i < obstacle.Length; i++)
+                for (int i = 0; i < obstacles.Length; i++)
                 {
-                    obstacle[i].Generate();
+                    obstacles[i].Generate();
                 }
             }
             // 플레이어 랜더
             player.Generate();
             Console.SetCursorPosition(currLeft, currTop);
+
+            // 점수판 표시
             ScoreBoard();
-            Console.WriteLine("(아이템창 확인은 I를 눌러주세요.)");
-            Console.WriteLine();
-            Console.WriteLine("<플레이어의 위치>");
-            Console.WriteLine(player.pos);
+
+
         }
 
         private void StageReset(int _stage)
@@ -160,40 +165,24 @@ namespace KGA_OOPConsoleProject.Game
             List<int> list = new List<int>();
             Random rand = new Random();
 
-            obstacle = new Obstacle[maze.GetMap().GetLength(0) / 2];
-            Obstacle_Reset(obstacle);
+            obstacles = obstacleManager.CreateObstacles(maze.GetMap().GetLength(0) / 2);
 
-            player.maxHp = maze.Get_shortest_Path().Count - 1 + obstacle.Length;
+            // 스테이지가 변경될때 마다 캐릭터의 위치 및 기본값 초기화
+            player.maxHp = maze.Get_shortest_Path().Count - 1 + obstacles.Length;
             player.hp = player.maxHp;
             player.pos = (1, 1);
             
+            // 스테이지가 0이면 처음부터이기에 초기화
             if(stage == 0)
             {
                 player.state = EState.Alive;
                 inventory.InvenClear();
+                score = 0;
             }
         }
 
         // TODO : Obstacle_Reset을  Obstacle에 넣기
         // 
-
-        private void Obstacle_Reset(Obstacle[] _obstacle)
-        {
-            List<int> list = new List<int>();
-            Random rand = new Random();
-
-            for (int i = 0; i < _obstacle.Length; i++)
-            {
-                int num = rand.Next(2, maze.Get_Is_Path().Count - 2);
-
-                while (!list.Contains(num))
-                {
-                    list.Add(num);
-                }
-                _obstacle[i] = new Obstacle("ABC", 2, (maze.Get_Is_Path()[list.Last()].Item1, maze.Get_Is_Path()[num].Item2));
-            }
-        }
-
         private Items Obstacle_Coll(int dir)
         {
             (int, int)[] dirPos = { (-1, 0), (1, 0), (0, -1), (0, 1) };
@@ -202,22 +191,22 @@ namespace KGA_OOPConsoleProject.Game
                 return null;
 
             // 장애물 충돌 && 벽에 닿으면 박살
-            for (int i = 0; i < obstacle.Length; i++)
+            for (int i = 0; i < obstacles.Length; i++)
             {
-                if (player.pos == obstacle[i].pos)
+                if (player.pos == obstacles[i].pos)
                 {
                     player.hp--;
-                    int x = obstacle[i].pos.Item1;
-                    int y = obstacle[i].pos.Item2;
+                    int x = obstacles[i].pos.Item1;
+                    int y = obstacles[i].pos.Item2;
 
                     if (maze.search(x + dirPos[dir - 1].Item1, y + dirPos[dir - 1].Item2))
                     {
-                        obstacle[i].pos = (x + dirPos[dir - 1].Item1, y + dirPos[dir - 1].Item2);
+                        obstacles[i].pos = (x + dirPos[dir - 1].Item1, y + dirPos[dir - 1].Item2);
                         return null;
                     }
                     else
                     {
-                        obstacle[i].state = EState.Dead;
+                        obstacles[i].state = EState.Dead;
                         itemManager.Create();
                         return itemManager.GetItem();
                     }
@@ -255,7 +244,14 @@ namespace KGA_OOPConsoleProject.Game
         {
             Console.WriteLine($"{stage + 1} Stage \t 점수 : {score}");
             Console.WriteLine();
+            // 플레이어 이동가능 범위
             player.Render();
+
+            Console.WriteLine("(아이템창 확인은 I를 눌러주세요.)");
+            Console.WriteLine();
+
+            Console.WriteLine("<플레이어의 위치>");
+            Console.WriteLine(player.pos);
         }
 
         public void GameClear()
