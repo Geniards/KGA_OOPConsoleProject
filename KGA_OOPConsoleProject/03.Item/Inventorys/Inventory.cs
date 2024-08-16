@@ -9,9 +9,9 @@ namespace KGA_OOPConsoleProject._03.Item.Inventory
 {
     public class Inventory
     {
-        Maze maze = Maze.Instance;
-        int inputNum;
-        List<Items> invens;
+        private Maze maze = Maze.Instance;
+        private int inputNum;
+        private List<Items> invens;
 
         public Inventory(int num = 10)
         {

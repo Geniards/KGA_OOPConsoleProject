@@ -65,7 +65,10 @@ namespace KGA_OOPConsoleProject.Game
             }
 
             Console.Clear();
-            Console.WriteLine($"총 점수는 {score}");
+            Console.WriteLine($"총 점수는 {score}점");
+            Console.WriteLine($"<점수의 합계>");
+            Console.WriteLine($"이동 포인트 : {score}점");
+            Console.WriteLine($"남은 아이템 포인트 : ");
             Console.WriteLine("게임이 끝났습니다.");
 
         }
@@ -101,7 +104,7 @@ namespace KGA_OOPConsoleProject.Game
             int currTop = Console.CursorTop;
 
             // 장애물 랜더
-            if (stage >= 2)
+            if (stage >= (int)EStage.ESTAGE_MAX - 1)
             {
                 if (player.hp % 2 == 0)
                     for (int i = 0; i < obstacle.Length; i++)
@@ -195,22 +198,24 @@ namespace KGA_OOPConsoleProject.Game
 
         private void NextStage()
         {
+            if (player.hp <= 0)
+            {
+                player.Dead();
+                Thread.Sleep(1000);
+                return;
+            }
+
             if ((player.pos.Item1 == maze.GetMap().GetLength(0) - 2 && player.pos.Item2 == maze.GetMap().GetLength(1) - 2))
             {
-                if(stage < (int)EStage.ESTAGE_MAX)
+                if (stage < (int)EStage.ESTAGE_MAX)
                     score += player.hp;
 
                 Console.WriteLine("도착");
                 bNextStage = true;
 
-                if(stage < (int)EStage.ESTAGE_MAX - 1)
+                if (stage < (int)EStage.ESTAGE_MAX - 1)
                     Console.WriteLine("다음 스테이지로 이동합니다.");
-                
-                Thread.Sleep(1000);
-            }
-            else if(player.hp < 0)
-            {
-                player.Dead();
+
                 Thread.Sleep(1000);
             }
         }
