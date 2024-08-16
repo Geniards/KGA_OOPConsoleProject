@@ -11,7 +11,7 @@ namespace KGA_OOPConsoleProject._03.Item.Inventory
     {
         private Maze maze = Maze.Instance;
         private int inputNum;
-        private List<Items> invens;
+        public List<Items> invens {  get; private set; }
 
         public Inventory(int num = 10)
         {
@@ -35,7 +35,10 @@ namespace KGA_OOPConsoleProject._03.Item.Inventory
             Console.WriteLine();
             foreach (var item in invens)
             {
-                Console.WriteLine($"{i + 1}. {item.name,-8} \t효과 : {item.info}");
+                if(item.name != "점프")
+                    Console.WriteLine($"{i + 1}. {item.name,-8} \t효과 : {item.info}");
+                else
+                    Console.WriteLine($"{i + 1}. {item.name,-8} \t\t효과 : {item.info}");
                 i++;
             }
             Console.WriteLine();
