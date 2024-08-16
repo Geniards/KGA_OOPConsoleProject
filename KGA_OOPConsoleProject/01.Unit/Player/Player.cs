@@ -13,8 +13,6 @@ namespace KGA_OOPConsoleProject
         public (int, int) pos { get; set; }
         public EState state { get; set; }
 
-        public Inventory inventory;
-
         public Player(string _name, int _maxCount)
         {
             name = _name;
@@ -28,7 +26,6 @@ namespace KGA_OOPConsoleProject
             state = EState.Alive;
             Console.WriteLine("플레이어 초기화");
             pos = (1, 1);
-            inventory = new Inventory();
         }
 
         public void Generate()
@@ -52,14 +49,6 @@ namespace KGA_OOPConsoleProject
                 Console.WriteLine("에너지가 다 떨어졌습니다.");
                 state = EState.Dead;
             }
-        }
-
-        public void ItemSearch(Items item)
-        {
-            if (item == null)
-                return;
-
-            inventory.Item_PickUp(item);
         }
     }
 }
