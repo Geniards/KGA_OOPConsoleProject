@@ -120,7 +120,7 @@ namespace KGA_OOPConsoleProject._03.Item.Inventory
 
         private void Item_Use(int num, Player player)
         {
-            if(num-1 > invens.Count)
+            if(num-1 >= invens.Count)
             {
                 Console.WriteLine($"==================================================");
                 Console.WriteLine("잘못된 입력입니다.");

@@ -7,7 +7,6 @@ namespace KGA_OOPConsoleProject
     public class Obstacle : Monster
     {
         public (int, int) pos;
-        public event Action OnDied;
 
         public Obstacle(string _name, int _maxHp, (int, int) _pos) : base(_name, _maxHp, _pos)
         {
@@ -34,10 +33,6 @@ namespace KGA_OOPConsoleProject
 
         public override void Dead()
         {
-            if (OnDied != null)
-            {
-                OnDied();
-            }
         }
     }
 }
