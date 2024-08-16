@@ -41,7 +41,7 @@ namespace KGA_OOPConsoleProject
             Console.WriteLine($"[* number of moves: {hp} / {maxHp} *]");
         }
 
-        public void Dead()
+        public void Die()
         {
             if (hp < 0)
             {

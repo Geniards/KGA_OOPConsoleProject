@@ -129,12 +129,12 @@ namespace KGA_OOPConsoleProject
             }
         }
 
-        public void searchLoard()
+        public void searchShortRoad()
         {
             FindshortestPath();
         }
 
-        public bool search(int x, int y)
+        public bool searchPath(int x, int y)
         {
             if (x > 0 && x < graph.GetLength(0) - 1 &&
                 y > 0 && y < graph.GetLength(1) - 1)

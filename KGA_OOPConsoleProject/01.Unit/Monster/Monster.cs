@@ -33,7 +33,7 @@ namespace KGA_OOPConsoleProject
         {
         }
 
-        public virtual void Dead()
+        public virtual void Die()
         {
 
         }

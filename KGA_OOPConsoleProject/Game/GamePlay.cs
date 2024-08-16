@@ -16,7 +16,7 @@ namespace KGA_OOPConsoleProject.Game
         ObstacleManager obstacleManager;
 
         Player player;
-        InputComponent input;
+        InputManager input;
 
         ItemManager itemManager;
         Inventory inventory;
@@ -32,7 +32,7 @@ namespace KGA_OOPConsoleProject.Game
             bNextStage = false;
 
             // 맵 생성
-            maze.searchLoard();
+            maze.searchShortRoad();
 
             // 아이템 생성
             itemManager = new ItemManager();
@@ -45,7 +45,7 @@ namespace KGA_OOPConsoleProject.Game
             // player 초기화 && 입력 시스템 초기화
             player = new Player("Player", maze.Get_shortest_Path().Count - 1 + obstacles.Length);
             
-            input = new InputComponent();
+            input = new InputManager();
         }
 
         private void Title()
@@ -161,7 +161,7 @@ namespace KGA_OOPConsoleProject.Game
         {
             stage = _stage;
             maze.SetSize(11 + 4 * stage);
-            maze.searchLoard();
+            maze.searchShortRoad();
 
             obstacles = obstacleManager.CreateObstacles(maze.GetMap().GetLength(0) / 2);
 
@@ -183,7 +183,7 @@ namespace KGA_OOPConsoleProject.Game
         {
             if (player.hp < 0)
             {
-                player.Dead();
+                player.Die();
                 Thread.Sleep(1000);
                 return;
             }
@@ -217,7 +217,7 @@ namespace KGA_OOPConsoleProject.Game
             Console.WriteLine(player.pos);
         }
 
-        public void GameClear()
+        private void GameClear()
         {
             Console.Clear();
             Console.WriteLine($"<점수의 합계>");

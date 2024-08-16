@@ -41,7 +41,7 @@ namespace KGA_OOPConsoleProject._01.Unit.Monster
             return obstacles;
         }
 
-        public Items Obstacle_Coll(ref int dir, ref Player player, ref Obstacle[] obstacles)
+        public Items Collision(ref int dir, ref Player player, ref Obstacle[] obstacles)
         {
             (int, int)[] dirPos = { (-1, 0), (1, 0), (0, -1), (0, 1) };
 
@@ -57,7 +57,7 @@ namespace KGA_OOPConsoleProject._01.Unit.Monster
                     int x = obstacles[i].pos.Item1;
                     int y = obstacles[i].pos.Item2;
 
-                    if (maze.search(x + dirPos[dir - 1].Item1, y + dirPos[dir - 1].Item2))
+                    if (maze.searchPath(x + dirPos[dir - 1].Item1, y + dirPos[dir - 1].Item2))
                     {
                         obstacles[i].pos = (x + dirPos[dir - 1].Item1, y + dirPos[dir - 1].Item2);
                         return null;

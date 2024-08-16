@@ -16,6 +16,6 @@ namespace KGA_OOPConsoleProject.Interface
 
         public EState state { get; protected set; }
 
-        public void Dead();
+        public void Die();
     }
 }

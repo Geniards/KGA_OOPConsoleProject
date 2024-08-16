@@ -197,7 +197,7 @@ namespace KGA_OOPConsoleProject._03.Item.Inventory
                 {
                     case ConsoleKey.NumPad1:
                     case ConsoleKey.D1:
-                        if (maze.search(player.pos.Item1 - 2, player.pos.Item2))
+                        if (maze.searchPath(player.pos.Item1 - 2, player.pos.Item2))
                         {
                             player.pos = (player.pos.Item1 - invens[num - 1].Use(), player.pos.Item2);
                             Console.WriteLine("위로 점프!");
@@ -210,7 +210,7 @@ namespace KGA_OOPConsoleProject._03.Item.Inventory
                         break;
                     case ConsoleKey.NumPad2:
                     case ConsoleKey.D2:
-                        if (maze.search(player.pos.Item1 + 2, player.pos.Item2))
+                        if (maze.searchPath(player.pos.Item1 + 2, player.pos.Item2))
                         {
                             player.pos = (player.pos.Item1 + invens[num - 1].Use(), player.pos.Item2);
                             Console.WriteLine("아래로 점프!");
@@ -223,7 +223,7 @@ namespace KGA_OOPConsoleProject._03.Item.Inventory
                         break;
                     case ConsoleKey.NumPad3:
                     case ConsoleKey.D3:
-                        if (maze.search(player.pos.Item1, player.pos.Item2 - 2))
+                        if (maze.searchPath(player.pos.Item1, player.pos.Item2 - 2))
                         {
                             player.pos = (player.pos.Item1, player.pos.Item2 - invens[num - 1].Use());
                             Console.WriteLine("왼쪽으로 점프!");
@@ -236,7 +236,7 @@ namespace KGA_OOPConsoleProject._03.Item.Inventory
                         break;
                     case ConsoleKey.NumPad4:
                     case ConsoleKey.D4:
-                        if (maze.search(player.pos.Item1, player.pos.Item2 + 2))
+                        if (maze.searchPath(player.pos.Item1, player.pos.Item2 + 2))
                         {
                             player.pos = (player.pos.Item1, player.pos.Item2 + invens[num - 1].Use());
                             Console.WriteLine("오른쪽으로 점프!");

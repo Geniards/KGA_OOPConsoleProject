@@ -30,7 +30,7 @@ namespace KGA_OOPConsoleProject
         {
         }
 
-        public override void Dead()
+        public override void Die()
         {
         }
     }

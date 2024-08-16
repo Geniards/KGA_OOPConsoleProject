@@ -2,7 +2,7 @@
 
 namespace KGA_OOPConsoleProject.Input
 {
-    public class InputComponent
+    public class InputManager
     {
         Maze maze = Maze.Instance;
 
