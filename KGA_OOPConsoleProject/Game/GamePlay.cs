@@ -39,14 +39,14 @@ namespace KGA_OOPConsoleProject.Game
             Obstacle_Reset(obstacle);
 
             // player 초기화 && 입력 시스템 초기화
-            player = new Player("ABC", maze.Get_shortest_Path().Count - 1 + obstacle.Length);
+            player = new Player("Player", maze.Get_shortest_Path().Count - 1 + obstacle.Length);
             input = new InputComponent();
         }
 
 
         public void Run()
         {
-            while (player.state != EState.Dead && stage < 1)
+            while (player.state != EState.Dead && stage < (int)EStage.ESTAGE_MAX)
             {
                 (int x, int y) pos = player.pos;
                 int count = player.hp;
@@ -64,13 +64,7 @@ namespace KGA_OOPConsoleProject.Game
                 update(dir);
             }
 
-            Console.Clear();
-            Console.WriteLine($"총 점수는 {score}점");
-            Console.WriteLine($"<점수의 합계>");
-            Console.WriteLine($"이동 포인트 : {score}점");
-            Console.WriteLine($"남은 아이템 포인트 : ");
-            Console.WriteLine("게임이 끝났습니다.");
-
+            GameClear();
         }
 
         private void update(int dir)
@@ -140,7 +134,9 @@ namespace KGA_OOPConsoleProject.Game
             obstacle = new Obstacle[maze.GetMap().GetLength(0) / 2];
             Obstacle_Reset(obstacle);
 
-            player = new Player("ABC", maze.Get_shortest_Path().Count - 1 + obstacle.Length);
+            player.maxHp = maze.Get_shortest_Path().Count - 1 + obstacle.Length;
+            player.hp = player.maxHp;
+            player.pos = (1, 1);
         }
 
         private void Obstacle_Reset(Obstacle[] _obstacle)
@@ -157,7 +153,6 @@ namespace KGA_OOPConsoleProject.Game
                     list.Add(num);
                 }
                 _obstacle[i] = new Obstacle("ABC", 2, (maze.Get_Is_Path()[list.Last()].Item1, maze.Get_Is_Path()[num].Item2));
-                _obstacle[i].OnDied += itemManager.Create;
             }
         }
 
@@ -187,7 +182,7 @@ namespace KGA_OOPConsoleProject.Game
                     else
                     {
                         obstacle[i].state = EState.Dead;
-                        obstacle[i].Dead();
+                        itemManager.Create();
                         return itemManager.GetItem();
                     }
                 }
@@ -198,7 +193,7 @@ namespace KGA_OOPConsoleProject.Game
 
         private void NextStage()
         {
-            if (player.hp <= 0)
+            if (player.hp < 0)
             {
                 player.Dead();
                 Thread.Sleep(1000);
@@ -225,6 +220,34 @@ namespace KGA_OOPConsoleProject.Game
             Console.WriteLine($"{stage + 1} Stage \t 점수 : {score}");
             Console.WriteLine();
             player.Render();
+        }
+
+        public void GameClear()
+        {
+            Console.Clear();
+            Console.WriteLine($"<점수의 합계>");
+            Console.WriteLine("===================================");
+            Console.WriteLine($"이동 포인트 : {score}점");
+            int i = 0; 
+            int itemScore = 0;
+            Console.WriteLine("-----------------------------------");
+            foreach (var item in inventory.invens)
+            {
+
+                if (item.name != "점프")
+                    Console.WriteLine($"{i + 1}. {item.name,-8} \t 점수 : {item.gold}");
+                else
+                    Console.WriteLine($"{i + 1}. {item.name,-8} \t\t 점수 : {item.gold}");
+                i++;
+                itemScore += item.gold;
+            }
+            Console.WriteLine($"남은 아이템 포인트 : {itemScore}점");
+            Console.WriteLine("-----------------------------------");
+
+            Console.WriteLine($"총 점수는 {score + itemScore}점");
+            Console.WriteLine("===================================");
+
+            Console.WriteLine("게임이 끝났습니다.");
         }
     }
 }
