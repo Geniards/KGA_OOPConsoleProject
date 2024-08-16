@@ -1,7 +1,9 @@
-﻿using KGA_OOPConsoleProject._03.Item.Item;
+﻿using KGA_OOPConsoleProject._03.Item.Inventory;
+using KGA_OOPConsoleProject._03.Item.Item;
 using KGA_OOPConsoleProject.Input;
 using KGA_OOPConsoleProject.Util;
 using System;
+using System.Numerics;
 
 namespace KGA_OOPConsoleProject.Game
 {
@@ -11,11 +13,11 @@ namespace KGA_OOPConsoleProject.Game
         Obstacle[] obstacle;
         Player player;
         InputComponent input;
-        Navi navi;
         ItemManager itemManager;
-        
+        Inventory inventory;
 
         int stage = 0;
+        int score = 0;
         bool bNextStage;
 
         // 초기 맵 생성
@@ -30,6 +32,7 @@ namespace KGA_OOPConsoleProject.Game
 
             // 아이템 생성
             itemManager = new ItemManager();
+            inventory = new Inventory();
 
             // 장애물 생성
             obstacle = new Obstacle[maze.GetMap().GetLength(0) / 2];
@@ -38,15 +41,12 @@ namespace KGA_OOPConsoleProject.Game
             // player 초기화 && 입력 시스템 초기화
             player = new Player("ABC", maze.Get_shortest_Path().Count - 1 + obstacle.Length);
             input = new InputComponent();
-
-            // 장애물 이동 및 길 찾기
-            navi = new Navi(maze, player);
         }
 
 
         public void Run()
         {
-            while (player.state != EState.Dead && stage < 3)
+            while (player.state != EState.Dead && stage < 1)
             {
                 (int x, int y) pos = player.pos;
                 int count = player.hp;
@@ -55,7 +55,7 @@ namespace KGA_OOPConsoleProject.Game
                 Render();
 
                 // 입력
-                input.Move(maze.GetMap(), ref pos, ref count, ref dir);
+                input.Input(Console.ReadKey().Key, ref pos, ref count, ref dir);
 
                 // 플레이어 위치 초기화
                 player.pos = pos;
@@ -65,6 +65,7 @@ namespace KGA_OOPConsoleProject.Game
             }
 
             Console.Clear();
+            Console.WriteLine($"총 점수는 {score}");
             Console.WriteLine("게임이 끝났습니다.");
 
         }
@@ -72,10 +73,11 @@ namespace KGA_OOPConsoleProject.Game
         private void update(int dir)
         {
             // 장애물과 충돌 했는지 및 아이템이 발생했을 때
-            player.ItemSearch(Obstacle_Coll(dir));
-           
-            // 최단경로 확인 'M'
-            navi.Shortest_Path(dir);
+            inventory.Item_PickUp(Obstacle_Coll(dir));
+            
+            if(dir==(int)EShortKey.Inven)
+                inventory.Inven_open(player);
+    
             // 스테이지를 클리어시
             NextStage();
 
@@ -172,6 +174,8 @@ namespace KGA_OOPConsoleProject.Game
                     int x = obstacle[i].pos.Item1;
                     int y = obstacle[i].pos.Item2;
 
+                    // TODO : 장애물이 부서진 위치에서 i를 누르면 dir이 상호작용이 되서 문제가 발생
+                    // 
                     if (maze.search(x + dirPos[dir - 1].Item1, y + dirPos[dir - 1].Item2))
                     {
                         obstacle[i].pos = (x + dirPos[dir - 1].Item1, y + dirPos[dir - 1].Item2);
@@ -193,10 +197,15 @@ namespace KGA_OOPConsoleProject.Game
         {
             if ((player.pos.Item1 == maze.GetMap().GetLength(0) - 2 && player.pos.Item2 == maze.GetMap().GetLength(1) - 2))
             {
+                if(stage < (int)EStage.ESTAGE_MAX)
+                    score += player.hp;
+
                 Console.WriteLine("도착");
                 bNextStage = true;
-                if(stage < 2)
+
+                if(stage < (int)EStage.ESTAGE_MAX - 1)
                     Console.WriteLine("다음 스테이지로 이동합니다.");
+                
                 Thread.Sleep(1000);
             }
             else if(player.hp < 0)
@@ -208,7 +217,7 @@ namespace KGA_OOPConsoleProject.Game
 
         private void Title()
         {
-            Console.WriteLine($"{stage + 1} Stage");
+            Console.WriteLine($"{stage + 1} Stage \t 점수 : {score}");
             Console.WriteLine();
             player.Render();
         }
