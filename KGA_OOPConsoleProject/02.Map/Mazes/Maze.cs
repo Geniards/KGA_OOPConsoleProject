@@ -1,4 +1,5 @@
 ﻿using KGA_OOPConsoleProject.Interface;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace KGA_OOPConsoleProject
 {
@@ -126,8 +127,14 @@ namespace KGA_OOPConsoleProject
 
         public bool search(int x, int y)
         {
-            if (graph[x, y] == 1)
-                return true;
+            if (x > 0 && x < graph.GetLength(0) - 1 &&
+                y > 0 && y < graph.GetLength(1) - 1)
+            {
+                if (graph[x, y] == 1)
+                    return true;
+
+            }
+
             return false;
         }
 
