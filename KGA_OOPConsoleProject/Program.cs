@@ -7,9 +7,13 @@ namespace KGA_OOPConsoleProject
     {
         static void Main(string[] args)
         {
+            int num = 0;
             GamePlay gamePlay = new GamePlay();
-
-            gamePlay.Run();
+         
+            while (true)
+            {
+                gamePlay.Run();
+            }
         }
 
     }
