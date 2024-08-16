@@ -22,8 +22,7 @@ namespace KGA_OOPConsoleProject
             }
             else
             {
-                pos.Item1 = 0;
-                pos.Item2 = 0;
+                pos = (0, 0);
             }
         }
 

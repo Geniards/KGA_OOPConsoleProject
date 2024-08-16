@@ -39,11 +39,12 @@ namespace KGA_OOPConsoleProject.Game
             inventory = new Inventory();
 
             // 장애물 생성
-            obstacleManager = new ObstacleManager();
+            obstacleManager = new ObstacleManager(itemManager);
             obstacles = obstacleManager.CreateObstacles(maze.GetMap().GetLength(0) / 2);
 
             // player 초기화 && 입력 시스템 초기화
             player = new Player("Player", maze.Get_shortest_Path().Count - 1 + obstacles.Length);
+            
             input = new InputComponent();
         }
 
@@ -103,7 +104,7 @@ namespace KGA_OOPConsoleProject.Game
         private void update(int dir)
         {
             // 장애물과 충돌 했는지 및 아이템이 발생했을 때
-            inventory.Item_PickUp(Obstacle_Coll(dir));
+            inventory.Item_PickUp(obstacleManager.Collision(ref dir, ref player, ref obstacles));
             
             if(dir==(int)EShortKey.Inven)
                 inventory.Inven_open(player);
@@ -161,9 +162,6 @@ namespace KGA_OOPConsoleProject.Game
             stage = _stage;
             maze.SetSize(11 + 4 * stage);
             maze.searchLoard();
-            
-            List<int> list = new List<int>();
-            Random rand = new Random();
 
             obstacles = obstacleManager.CreateObstacles(maze.GetMap().GetLength(0) / 2);
 
@@ -179,41 +177,6 @@ namespace KGA_OOPConsoleProject.Game
                 inventory.InvenClear();
                 score = 0;
             }
-        }
-
-        // TODO : Obstacle_Reset을  Obstacle에 넣기
-        // 
-        private Items Obstacle_Coll(int dir)
-        {
-            (int, int)[] dirPos = { (-1, 0), (1, 0), (0, -1), (0, 1) };
-
-            if (dir - 1 > dirPos.Length)
-                return null;
-
-            // 장애물 충돌 && 벽에 닿으면 박살
-            for (int i = 0; i < obstacles.Length; i++)
-            {
-                if (player.pos == obstacles[i].pos)
-                {
-                    player.hp--;
-                    int x = obstacles[i].pos.Item1;
-                    int y = obstacles[i].pos.Item2;
-
-                    if (maze.search(x + dirPos[dir - 1].Item1, y + dirPos[dir - 1].Item2))
-                    {
-                        obstacles[i].pos = (x + dirPos[dir - 1].Item1, y + dirPos[dir - 1].Item2);
-                        return null;
-                    }
-                    else
-                    {
-                        obstacles[i].state = EState.Dead;
-                        itemManager.Create();
-                        return itemManager.GetItem();
-                    }
-                }
-            }
-
-            return null;
         }
 
         private void NextStage()
