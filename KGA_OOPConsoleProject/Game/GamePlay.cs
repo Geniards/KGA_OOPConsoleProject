@@ -27,7 +27,6 @@ namespace KGA_OOPConsoleProject.Game
             bNextStage = false;
 
             // 맵 생성
-            maze.Render();
             maze.searchLoard();
 
             // 아이템 생성
@@ -43,9 +42,38 @@ namespace KGA_OOPConsoleProject.Game
             input = new InputComponent();
         }
 
+        private void Title()
+        {
+            Console.Clear();
+
+            string[] titleLines = new string[]
+            {
+
+               @"___  ___  ___   ______ _____   _____   ___  ___  ___ _____ ",
+               @"|  \/  | / _ \ |___  /|  ___| |  __ \ / _ \ |  \/  ||  ___|",
+               @"| .  . |/ /_\ \   / / | |__   | |  \// /_\ \| .  . || |__  ",
+               @"| |\/| ||  _  |  / /  |  __|  | | __ |  _  || |\/| ||  __| ",
+               @"| |  | || | | |./ /___| |___  | |_\ \| | | || |  | || |___ ",
+               @"\_|  |_/\_| |_/\_____/\____/   \____/\_| |_/\_|  |_/\____/ "
+            };
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            foreach (string line in titleLines)
+            {
+                Console.WriteLine(line);
+                Thread.Sleep(100);
+            }
+            Console.ResetColor();
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine("\t시작하려면 아무키나 눌러 주세요.");
+            Console.ReadKey();
+        }
 
         public void Run()
         {
+            Title();
+
             while (player.state != EState.Dead && stage < (int)EStage.ESTAGE_MAX)
             {
                 (int x, int y) pos = player.pos;
@@ -84,7 +112,7 @@ namespace KGA_OOPConsoleProject.Game
             if (bNextStage)
             {
                 stage++;
-                reset();
+                StageReset(stage);
                 bNextStage = false;
             }
         }
@@ -116,18 +144,19 @@ namespace KGA_OOPConsoleProject.Game
             // 플레이어 랜더
             player.Generate();
             Console.SetCursorPosition(currLeft, currTop);
-            Title();
-
+            ScoreBoard();
+            Console.WriteLine("(아이템창 확인은 I를 눌러주세요.)");
+            Console.WriteLine();
             Console.WriteLine("<플레이어의 위치>");
             Console.WriteLine(player.pos);
         }
 
-        private void reset()
+        private void StageReset(int _stage)
         {
+            stage = _stage;
             maze.SetSize(11 + 4 * stage);
-            maze.Render();
             maze.searchLoard();
-
+            
             List<int> list = new List<int>();
             Random rand = new Random();
 
@@ -137,7 +166,16 @@ namespace KGA_OOPConsoleProject.Game
             player.maxHp = maze.Get_shortest_Path().Count - 1 + obstacle.Length;
             player.hp = player.maxHp;
             player.pos = (1, 1);
+            
+            if(stage == 0)
+            {
+                player.state = EState.Alive;
+                inventory.InvenClear();
+            }
         }
+
+        // TODO : Obstacle_Reset을  Obstacle에 넣기
+        // 
 
         private void Obstacle_Reset(Obstacle[] _obstacle)
         {
@@ -172,8 +210,6 @@ namespace KGA_OOPConsoleProject.Game
                     int x = obstacle[i].pos.Item1;
                     int y = obstacle[i].pos.Item2;
 
-                    // TODO : 장애물이 부서진 위치에서 i를 누르면 dir이 상호작용이 되서 문제가 발생
-                    // 
                     if (maze.search(x + dirPos[dir - 1].Item1, y + dirPos[dir - 1].Item2))
                     {
                         obstacle[i].pos = (x + dirPos[dir - 1].Item1, y + dirPos[dir - 1].Item2);
@@ -215,7 +251,7 @@ namespace KGA_OOPConsoleProject.Game
             }
         }
 
-        private void Title()
+        private void ScoreBoard()
         {
             Console.WriteLine($"{stage + 1} Stage \t 점수 : {score}");
             Console.WriteLine();
@@ -231,23 +267,24 @@ namespace KGA_OOPConsoleProject.Game
             int i = 0; 
             int itemScore = 0;
             Console.WriteLine("-----------------------------------");
-            foreach (var item in inventory.invens)
-            {
-
-                if (item.name != "점프")
-                    Console.WriteLine($"{i + 1}. {item.name,-8} \t 점수 : {item.gold}");
-                else
-                    Console.WriteLine($"{i + 1}. {item.name,-8} \t\t 점수 : {item.gold}");
-                i++;
-                itemScore += item.gold;
-            }
-            Console.WriteLine($"남은 아이템 포인트 : {itemScore}점");
+            inventory.ItemScore(ref itemScore);
+            Console.WriteLine();
+            Console.WriteLine($"남은 아이템 포인트 :{" ",4} {itemScore}점");
             Console.WriteLine("-----------------------------------");
 
+            Console.BackgroundColor = ConsoleColor.Yellow;
+            Console.ForegroundColor = ConsoleColor.DarkBlue;
             Console.WriteLine($"총 점수는 {score + itemScore}점");
+            Console.ResetColor();
             Console.WriteLine("===================================");
 
             Console.WriteLine("게임이 끝났습니다.");
+
+            Console.WriteLine();
+            Console.WriteLine("5초 뒤 타이틀 화면으로 이동합니다.");
+
+            StageReset(0);
+            Thread.Sleep(5000);
         }
     }
 }

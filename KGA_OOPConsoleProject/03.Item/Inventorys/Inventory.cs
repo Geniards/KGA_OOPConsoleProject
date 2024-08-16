@@ -11,7 +11,7 @@ namespace KGA_OOPConsoleProject._03.Item.Inventory
     {
         private Maze maze = Maze.Instance;
         private int inputNum;
-        public List<Items> invens {  get; private set; }
+        private List<Items> invens;
 
         public Inventory(int num = 10)
         {
@@ -54,13 +54,17 @@ namespace KGA_OOPConsoleProject._03.Item.Inventory
                 Console.Clear();
                 Console.WriteLine($"{item.name}을/를 발견했습니다");
                 Console.WriteLine($"아이템을 주우시려면 P를 눌러주세요");
+                Console.WriteLine($"(아이템을 안주우시려면 G를 눌러주세요)");
                 Render();
                 ConsoleKey key = Console.ReadKey().Key;
 
                 int currLeft = Console.CursorLeft;
                 int currTop = Console.CursorTop;
 
-                Console.SetCursorPosition(currLeft - 1, currTop);
+                if(currLeft>0)
+                    Console.SetCursorPosition(currLeft - 1, currTop);
+                else
+                    Console.SetCursorPosition(0, currTop);
 
                 if (key == ConsoleKey.P)
                 {
@@ -78,6 +82,13 @@ namespace KGA_OOPConsoleProject._03.Item.Inventory
                         Thread.Sleep(1000);
                         break;
                     }
+                }
+                else if (key == ConsoleKey.G)
+                {
+                    Console.WriteLine("아이템을 바닥에 두었습니다.");
+                    Console.WriteLine("아이템이 증발했습니다.");
+                    Thread.Sleep(1000);
+                    break;
                 }
                 else
                 {
@@ -245,7 +256,25 @@ namespace KGA_OOPConsoleProject._03.Item.Inventory
 
             Thread.Sleep(500);
         }
-    }
 
+        public void ItemScore(ref int itemScore)
+        {
+            int i = 0;
+            foreach (var item in invens)
+            {
+                if (item.name != "점프")
+                    Console.WriteLine($"{i + 1}. {item.name,-8} \t 점수 : {item.gold}");
+                else
+                    Console.WriteLine($"{i + 1}. {item.name,-8} \t\t 점수 : {item.gold}");
+                i++;
+                itemScore += item.gold;
+            }
+        }
+
+        public void InvenClear()
+        {
+            invens.Clear();
+        }
+    }
 
 }
