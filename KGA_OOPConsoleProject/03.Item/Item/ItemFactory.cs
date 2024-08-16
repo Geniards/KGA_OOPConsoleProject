@@ -37,11 +37,11 @@ namespace KGA_OOPConsoleProject._03.Item.Item
             else if (Name == "Jummper")
             {
                 Jump jump = new Jump();
-                jump.name = "점퍼";
+                jump.name = "점프";
                 jump.info = "벽을 한칸 건너 뛸 수 있다.";
                 jump.type = Util.EItemType.Jump;
                 jump.gold = 150;
-                jump.effect = 1;
+                jump.effect = 2;
 
                 return jump as T;
             }
@@ -81,11 +81,11 @@ namespace KGA_OOPConsoleProject._03.Item.Item
             else if(name == "Jump")
             {
                 Jump jump = new Jump();
-                jump.name = "점퍼";
+                jump.name = "점프";
                 jump.info = "벽을 한칸 건너 뛸 수 있다.";
                 jump.type = Util.EItemType.Jump;
                 jump.gold = 150;
-                jump.effect = 1;
+                jump.effect = 2;
 
                 return jump;
             }

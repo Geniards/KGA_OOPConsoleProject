@@ -1,19 +1,44 @@
-﻿namespace KGA_OOPConsoleProject.Input
+﻿using KGA_OOPConsoleProject.Util;
+
+namespace KGA_OOPConsoleProject.Input
 {
     public class InputComponent
     {
+        Maze maze = Maze.Instance;
 
+        public ConsoleKey key;
 
-        public void Move(int[,] graph, ref (int x, int y) pos, ref int count, ref int dir)
+        public void Input(ConsoleKey _key, ref (int x, int y) pos, ref int count, ref int dir)
         {
-            ConsoleKeyInfo cki = Console.ReadKey();
-            // Up
-            if (pos.x - 1 >= 0 && cki.Key == ConsoleKey.UpArrow)
+            key = _key;
+
+            switch (key)
             {
-                if (graph[pos.x - 1, pos.y] != 0)
+                case ConsoleKey.UpArrow:
+                case ConsoleKey.DownArrow:
+                case ConsoleKey.LeftArrow:
+                case ConsoleKey.RightArrow:
+                    Move(ref pos, ref count, ref dir);
+                    break;
+                case ConsoleKey.I:
+                    ShortCutKey(ref dir);
+                    break;
+                
+                default:
+                    break;
+            }
+
+        }
+
+        private void Move(ref (int x, int y) pos, ref int count, ref int dir)
+        {
+            // Up
+            if (key == ConsoleKey.UpArrow)
+            {
+                if (maze.GetMap()[pos.x - 1, pos.y] != 0)
                 {
                     pos.x -= 1;
-                    dir = 1;
+                    dir = (int)EShortKey.Up;
                 }
                 else
                 {
@@ -24,12 +49,12 @@
                 count--;
             }
             // Down
-            else if (cki.Key == ConsoleKey.DownArrow)
+            else if (key == ConsoleKey.DownArrow)
             {
-                if (graph[pos.x + 1, pos.y] != 0)
+                if (maze.GetMap()[pos.x + 1, pos.y] != 0)
                 {
                     pos.x += 1;
-                    dir = 2;
+                    dir = (int)EShortKey.Down;
                 }
                 else
                 {
@@ -39,12 +64,12 @@
                 count--;
             }
             // Left
-            else if (cki.Key == ConsoleKey.LeftArrow)
+            else if (key == ConsoleKey.LeftArrow)
             {
-                if (graph[pos.x, pos.y - 1] != 0)
+                if (maze.GetMap()[pos.x, pos.y - 1] != 0)
                 {
                     pos.y -= 1;
-                    dir = 3;
+                    dir = (int)EShortKey.Left;
                 }
                 else
                 {
@@ -54,12 +79,12 @@
                 count--;
             }
             // Right
-            else if (cki.Key == ConsoleKey.RightArrow)
+            else if (key == ConsoleKey.RightArrow)
             {
-                if (graph[pos.x, pos.y + 1] != 0)
+                if (maze.GetMap()[pos.x, pos.y + 1] != 0)
                 {
                     pos.y += 1;
-                    dir = 4;
+                    dir = (int)EShortKey.Right;
                 }
                 else
                 {
@@ -68,14 +93,25 @@
                 }
                 count--;
             }
-            else if (cki.Key == ConsoleKey.M)
-            {
-                    dir = 5;
-            }
             else
             {
                 Console.WriteLine("잘못된 입력입니다.");
                 Thread.Sleep(500);
+            }
+        }
+
+        private void ShortCutKey(ref int dir)
+        {
+            switch (key)
+            {
+                case ConsoleKey.I:
+                    dir = (int)EShortKey.Inven;
+                    break;
+                case ConsoleKey.M:
+                    break;
+
+                default:
+                    break;
             }
         }
     }
